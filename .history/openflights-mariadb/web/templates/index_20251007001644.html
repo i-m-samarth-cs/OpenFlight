@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenFlights - Advanced Database Platform</title>
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            padding: 60px 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102,126,234,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            color: #667eea;
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .hero-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.3em;
+            margin-bottom: 30px;
+        }
+        
+        .hero-features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .hero-feature {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .hero-feature:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .stat-card:hover::before {
+            left: 100%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            border-color: #667eea;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .stat-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-value {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .panel {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .panel:hover {
+            border-color: #667eea;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+        
+        .panel-title {
+            font-size: 1.8em;
+            color: #333;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .panel-icon {
+            font-size: 1.2em;
+            color: #667eea;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            border: 3px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+            transform: scale(1.02);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+        
+        .data-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .data-item {
+            padding: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .data-item:hover {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
+            transform: translateX(10px);
+            border-left: 4px solid #667eea;
+        }
+        
+        .item-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        .item-detail {
+            color: #666;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 6px 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.9em;
+            margin-left: 10px;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .similarity-score {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-left: 10px;
+            box-shadow: 0 3px 10px rgba(245, 87, 108, 0.3);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #999;
+            font-size: 1.2em;
+        }
+        
+        .loading i {
+            font-size: 3em;
+            color: #667eea;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        
+        .chatbot-button {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5); }
+            50% { transform: scale(1.1); box-shadow: 0 12px 35px rgba(102, 126, 234, 0.7); }
+        }
+        
+        .chatbot-button:hover {
+            transform: scale(1.15);
+        }
+        
+        .chatbot-window {
+            display: none;
+            position: fixed;
+            bottom: 120px;
+            right: 30px;
+            width: 400px;
+            height: 600px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .chatbot-window.active {
+            display: flex;
+        }
+        
+        .chatbot-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chatbot-header h3 {
+            font-size: 1.4em;
+            font-weight: 700;
+        }
+        
+        .chatbot-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .chatbot-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            background: #f8f9ff;
+        }
+        
+        .chat-message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .chat-message.bot {
+            flex-direction: row;
+        }
+        
+        .chat-message.user {
+            flex-direction: row-reverse;
+        }
+        
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+        
+        .message-avatar.bot {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .message-avatar.user {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+        
+        .message-content {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            line-height: 1.6;
+        }
+        
+        .message-content.bot {
+            background: white;
+            color: #333;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message-content.user {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .chatbot-input-area {
+            padding: 20px;
+            background: white;
+            border-top: 2px solid #f0f0f0;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .chatbot-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .chatbot-send {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-send:hover {
+            transform: scale(1.1);
+        }
+        
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .quick-action-btn {
+            background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-action-btn:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chatbot-window {
+                width: 90%;
+                right: 5%;
+            }
+            
+            .hero h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="hero">
+            <div class="hero-content">
+                <div class="hero-icon">✈️</div>
+                <h1>OpenFlights Database Platform</h1>
+                <p class="subtitle">Explore the world of aviation with advanced database technology</p>
+                <div class="hero-features">
+                    <div class="hero-feature"><i class="fas fa-server"></i> Galera Cluster</div>
+                    <div class="hero-feature"><i class="fas fa-chart-line"></i> ColumnStore Analytics</div>
+                    <div class="hero-feature"><i class="fas fa-search-location"></i> Vector Search</div>
+                    <div class="hero-feature"><i class="fas fa-globe"></i> 7,698+ Airports</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-plane-departure"></i></div>
+                <div class="stat-value" id="totalAirports">-</div>
+                <div class="stat-label">Airports</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-plane"></i></div>
+                <div class="stat-value" id="totalAirlines">-</div>
+                <div class="stat-label">Airlines</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-route"></i></div>
+                <div class="stat-value" id="totalRoutes">-</div>
+                <div class="stat-label">Routes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-ruler"></i></div>
+                <div class="stat-value" id="avgDistance">-</div>
+                <div class="stat-label">Avg Distance (km)</div>
+            </div>
+        </div>
+        
+        <div class="content-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title"><i class="fas fa-globe-americas panel-icon"></i> Airport Search</h2>
+                </div>
+                <input type="text" class="search-box" id="airportSearch" placeholder="🔍 Search airports by name, city, or code...">
+                <div class="data-list" id="airportsList">
+                    <div class="loading"><i class="fas fa-spinner"></i><br>Loading airports...</div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title"><i class="fas fa-plane-departure panel-icon"></i> Flight Routes</h2>
+                </div>
+                <div class="data-list" id="routesList">
+                    <div class="loading"><i class="fas fa-spinner"></i><br>Loading routes...</div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title"><i class="fas fa-chart-bar panel-icon"></i> Country Analytics</h2>
+                </div>
+                <div class="data-list" id="analyticsList">
+                    <div class="loading"><i class="fas fa-spinner"></i><br>Loading analytics...</div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title"><i class="fas fa-search-location panel-icon"></i> Vector Similarity Search</h2>
+                </div>
+                <input type="number" class="search-box" id="vectorAirportId" placeholder="Enter Airport ID (e.g., 3682 for JFK)">
+                <button class="btn" onclick="findSimilar()"><i class="fas fa-search"></i> Find Similar Airports</button>
+                <div class="data-list" id="vectorResults">
+                    <div class="loading">Enter an airport ID to find geographically similar airports</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="chatbot-container">
+        <button class="chatbot-button" onclick="toggleChatbot()">
+            <i class="fas fa-comments"></i>
+        </button>
+        
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <h3><i class="fas fa-robot"></i> Aviation Assistant</h3>
+                <button class="chatbot-close" onclick="toggleChatbot()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chatbot-messages" id="chatMessages">
+                <div class="chat-message bot">
+                    <div class="message-avatar bot"><i class="fas fa-robot"></i></div>
+                    <div class="message-content bot">
+                        👋 Hello! I'm your Aviation Assistant. I can help you navigate this platform and answer questions about airports, airlines, and flight routes.
+                        <div class="quick-actions">
+                            <button class="quick-action-btn" onclick="askBot('How do I search for airports?')">Search airports</button>
+                            <button class="quick-action-btn" onclick="askBot('What is vector search?')">Vector search</button>
+                            <button class="quick-action-btn" onclick="askBot('Show me statistics')">Statistics</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chatbot-input-area">
+                <input type="text" class="chatbot-input" id="chatInput" placeholder="Ask me anything..." onkeypress="handleChatKeyPress(event)">
+                <button class="chatbot-send" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let airportsData = [];
+        
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particles.appendChild(particle);
+            }
+        }
+        
+        createParticles();
+        
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                document.getElementById('totalAirports').textContent = data.total_airports.toLocaleString();
+                document.getElementById('totalAirlines').textContent = data.total_airlines.toLocaleString();
+                document.getElementById('totalRoutes').textContent = data.total_routes.toLocaleString();
+                document.getElementById('avgDistance').textContent = data.avg_distance.toLocaleString();
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        async function loadAirports() {
+            try {
+                const response = await fetch('/api/airports?limit=100');
+                airportsData = await response.json();
+                displayAirports(airportsData);
+            } catch (error) {
+                console.error('Error loading airports:', error);
+                document.getElementById('airportsList').innerHTML = '<div class="loading">Error loading airports</div>';
+            }
+        }
+        
+        function displayAirports(airports) {
+            const list = document.getElementById('airportsList');
+            if (airports.length === 0) {
+                list.innerHTML = '<div class="loading">No airports found</div>';
+                return;
+            }
+            
+            list.innerHTML = airports.map(airport => `
+                <div class="data-item">
+                    <div class="item-title">
+                        <i class="fas fa-plane"></i> ${airport.name || 'Unknown'}
+                        ${airport.iata ? `<span class="badge">${airport.iata}</span>` : ''}
+                    </div>
+                    <div class="item-detail">
+                        <i class="fas fa-map-marker-alt"></i> ${airport.city || 'N/A'}, ${airport.country || 'N/A'}
+                        ${airport.latitude && airport.longitude ? 
+                          `<br><i class="fas fa-globe"></i> ${airport.latitude.toFixed(4)}, ${airport.longitude.toFixed(4)}` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        async function loadRoutes() {
+            try {
+                const response = await fetch('/api/routes?limit=50');
+                const routes = await response.json();
+                const list = document.getElementById('routesList');
+                
+                list.innerHTML = routes.map(route => `
+                    <div class="data-item">
+                        <div class="item-title">
+                            <i class="fas fa-plane-departure"></i> ${route.source_name || route.source_airport} 
+                            <i class="fas fa-arrow-right"></i> ${route.dest_name || route.dest_airport}
+                        </div>
+                        <div class="item-detail">
+                            <i class="fas fa-plane"></i> ${route.airline || 'Unknown Airline'}
+                            ${route.distance ? `<br><i class="fas fa-ruler-horizontal"></i> ${Math.round(route.distance).toLocaleString()} km` : ''}
+                            <br><i class="fas fa-globe-americas"></i> ${route.source_city}, ${route.source_country} → ${route.dest_city}, ${route.dest_country}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading routes:', error);
+                document.getElementById('routesList').innerHTML = '<div class="loading">Error loading routes</div>';
+            }
+        }
+        
+        async function loadAnalytics() {
+            try {
+                const response = await fetch('/api/analytics/country');
+                const stats = await response.json();
+                const list = document.getElementById('analyticsList');
+                
+                const medals = ['🥇', '🥈', '🥉'];
+                list.innerHTML = stats.map((stat, index) => `
+                    <div class="data-item">
+                        <div class="item-title">
+                            ${index < 3 ? medals[index] : `${index + 1}.`} ${stat.country}
+                            <span class="badge">${stat.total_routes.toLocaleString()} routes</span>
+                        </div>
+                        <div class="item-detail">
+                            <i class="fas fa-plane"></i> ${stat.total_airports} airports
+                            <br><i class="fas fa-ruler"></i> Avg Distance: ${stat.avg_distance ? Math.round(stat.avg_distance).toLocaleString() : 'N/A'} km
+                            <br><i class="fas fa-trophy"></i> Busiest: ${stat.busiest_airport || 'N/A'}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+                document.getElementById('analyticsList').innerHTML = '<div class="loading">Error loading analytics</div>';
+            }
+        }
+        
+        async function findSimilar() {
+            const airportId = document.getElementById('vectorAirportId').value;
+            if (!airportId) {
+                alert('Please enter an airport ID');
+                return;
+            }
+            
+            const resultsDiv = document.getElementById('vectorResults');
+            resultsDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><br>Searching for similar airports...</div>';
+            
+            try {
+                const response = await fetch(`/api/vector/similar/${airportId}`);
+                if (!response.ok) {
+                    throw new Error('Airport not found');
+                }
+                
+                const data = await response.json();
+                
+                resultsDiv.innerHTML = `
+                    <div class="data-item" style="background: linear-gradient(135deg, #e8ecff 0%, #f8f9ff 100%);">
+                        <div class="item-title"><i class="fas fa-bullseye"></i> Target Airport</div>
+                        <div class="item-detail">
+                            ${data.target.name}<br>
+                            <i class="fas fa-map-marker-alt"></i> ${data.target.latitude.toFixed(4)}, ${data.target.longitude.toFixed(4)}
+                        </div>
+                    </div>
+                    ${data.similar_airports.map(airport => `
+                        <div class="data-item">
+                            <div class="item-title">
+                                <i class="fas fa-plane"></i> ${airport.name || 'Unknown'}
+                                ${airport.iata ? `<span class="badge">${airport.iata}</span>` : ''}
+                                <span class="similarity-score">${(airport.similarity * 100).toFixed(1)}%</span>
+                            </div>
+                            <div class="item-detail">
+                                <i class="fas fa-map-marker-alt"></i> ${airport.city || 'N/A'}, ${airport.country || 'N/A'}
+                                <br><i class="fas fa-globe"></i> ${airport.latitude.toFixed(4)}, ${airport.longitude.toFixed(4)}
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            } catch (error) {
+                console.error('Error finding similar airports:', error);
+                resultsDiv.innerHTML = '<div class="loading">Error: Airport not found or invalid ID</div>';
+            }
+        }
+        
+        document.getElementById('airportSearch').addEventListener('input', async (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            if (searchTerm === '') {
+                displayAirports(airportsData);
+            } else {
+                const filtered = airportsData.filter(airport => 
+                    (airport.name && airport.name.toLowerCase().includes(searchTerm)) ||
+                    (airport.city && airport.city.toLowerCase().includes(searchTerm)) ||
+                    (airport.country && airport.country.toLowerCase().includes(searchTerm)) ||
+                    (airport.iata && airport.iata.toLowerCase().includes(searchTerm))
+                );
+                displayAirports(filtered);
+            }
+        });
+        
+        function toggleChatbot() {
+            const chatWindow = document.getElementById('chatbotWindow');
+            chatWindow.classList.toggle('active');
+            if (chatWindow.classList.contains('active')) {
+                document.getElementById('chatInput').focus();
+            }
+        }
+        
+        function addMessage(message, isBot = true) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${isBot ? 'bot' : 'user'}`;
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar ${isBot ? 'bot' : 'user'}">
+                    <i class="fas fa-${isBot ? 'robot' : 'user'}"></i>
+                </div>
+                <div class="message-content ${isBot ? 'bot' : 'user'}">
+                    ${message}
+                </div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        function getBotResponse(userMessage) {
+            const msg = userMessage.toLowerCase();
+            
+            if (msg.includes('search') || msg.includes('find airport')) {
+                return `To search for airports:<br><br>
+                    1. <i class="fas fa-search"></i> Use the search box in the "Airport Search" panel<br>
+                    2. <i class="fas fa-keyboard"></i> Type the airport name, city, country, or IATA code<br>
+                    3. <i class="fas fa-filter"></i> Results will filter automatically as you type<br><br>
+                    Try searching for "JFK", "London", or "Japan"!`;
+            }
+            
+            if (msg.includes('vector') || msg.includes('similar')) {
+                return `<i class="fas fa-search-location"></i> <strong>Vector Similarity Search</strong> finds airports that are geographically similar!<br><br>
+                    <strong>How it works:</strong><br>
+                    1. Converts lat/long to 3D vectors (x, y, z)<br>
+                    2. Calculates cosine similarity<br>
+                    3. Returns the most similar airports<br><br>
+                    <strong>Try it:</strong> Enter airport ID <strong>3682</strong> (JFK) in the Vector Search panel!`;
+            }
+            
+            if (msg.includes('statistic') || msg.includes('data') || msg.includes('number')) {
+                return `<i class="fas fa-chart-bar"></i> Our platform contains:<br><br>
+                    ✈️ <strong>7,698+ airports</strong> worldwide<br>
+                    🛫 <strong>6,000+ airlines</strong><br>
+                    🌍 <strong>67,663+ flight routes</strong><br>
+                    📊 Real-time analytics by country<br><br>
+                    Check the dashboard above for live statistics!`;
+            }
+            
+            if (msg.includes('route') || msg.includes('flight')) {
+                return `<i class="fas fa-route"></i> <strong>Flight Routes</strong> show connections between airports:<br><br>
+                    • View the longest routes in the world<br>
+                    • See distance calculations<br>
+                    • Filter by airline<br>
+                    • Check source and destination details<br><br>
+                    The "Flight Routes" panel shows the top routes by distance!`;
+            }
+            
+            if (msg.includes('country') || msg.includes('analytic')) {
+                return `<i class="fas fa-globe-americas"></i> <strong>Country Analytics</strong> provides insights:<br><br>
+                    📊 Total routes per country<br>
+                    ✈️ Number of airports<br>
+                    📏 Average route distances<br>
+                    🏆 Busiest airports<br><br>
+                    See the "Country Analytics" panel for the top 20 countries!`;
+            }
+            
+            if (msg.includes('feature') || msg.includes('what can') || msg.includes('help')) {
+                return `<i class="fas fa-star"></i> <strong>Platform Features:</strong><br><br>
+                    🔍 <strong>Airport Search</strong> - Find any airport worldwide<br>
+                    ✈️ <strong>Flight Routes</strong> - Explore global connections<br>
+                    📊 <strong>Analytics</strong> - Country-level statistics<br>
+                    🎯 <strong>Vector Search</strong> - Find similar airports<br>
+                    🚀 <strong>High Performance</strong> - MariaDB technology<br><br>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" onclick="askBot('How do I search for airports?')">Search Guide</button>
+                        <button class="quick-action-btn" onclick="askBot('What is vector search?')">Vector Search</button>
+                    </div>`;
+            }
+            
+            if (msg.includes('technology') || msg.includes('database') || msg.includes('mariadb')) {
+                return `<i class="fas fa-database"></i> <strong>Technology Stack:</strong><br><br>
+                    🗄️ <strong>MariaDB Architecture</strong><br>
+                    • Galera Cluster for high availability<br>
+                    • ColumnStore for fast analytics<br>
+                    • Vector search capabilities<br><br>
+                    🔧 <strong>Features:</strong><br>
+                    • Geospatial indexing (Geohash)<br>
+                    • Pre-computed statistics<br>
+                    • Real-time queries<br>
+                    • RESTful API`;
+            }
+            
+            if (msg.includes('example') || msg.includes('try')) {
+                return `<i class="fas fa-lightbulb"></i> <strong>Things to try:</strong><br><br>
+                    1. Search for "JFK" or "Heathrow" in Airport Search<br>
+                    2. Enter airport ID <strong>3682</strong> for JFK vector search<br>
+                    3. Check out the longest routes in Flight Routes<br>
+                    4. See which country has the most routes<br>
+                    5. Compare airports by geographic similarity<br><br>
+                    Just start typing in any search box!`;
+            }
+            
+            if (msg.includes('thank') || msg.includes('thanks')) {
+                return `<i class="fas fa-heart"></i> You're welcome! I'm here to help anytime you need assistance navigating the platform. Happy exploring! ✈️`;
+            }
+            
+            if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
+                return `<i class="fas fa-hand-wave"></i> Hello! How can I assist you today? I can help you with:<br><br>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" onclick="askBot('Show me features')">Features</button>
+                        <button class="quick-action-btn" onclick="askBot('How to search')">Search Guide</button>
+                        <button class="quick-action-btn" onclick="askBot('Give me examples')">Examples</button>
+                    </div>`;
+            }
+            
+            return `<i class="fas fa-question-circle"></i> I'm not sure about that. Here's what I can help you with:<br><br>
+                <div class="quick-actions">
+                    <button class="quick-action-btn" onclick="askBot('Show features')">Features</button>
+                    <button class="quick-action-btn" onclick="askBot('How to search airports')">Search</button>
+                    <button class="quick-action-btn" onclick="askBot('What is vector search')">Vector Search</button>
+                    <button class="quick-action-btn" onclick="askBot('Show statistics')">Statistics</button>
+                </div>`;
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message === '') return;
+            
+            addMessage(message, false);
+            input.value = '';
+            
+            setTimeout(() => {
+                const response = getBotResponse(message);
+                addMessage(response, true);
+            }, 500);
+        }
+        
+        function askBot(question) {
+            document.getElementById('chatInput').value = question;
+            sendMessage();
+        }
+        
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        window.addEventListener('load', () => {
+            loadStats();
+            loadAirports();
+            loadRoutes();
+            loadAnalytics();
+        });
+    </script>
+</body>
+</html>
